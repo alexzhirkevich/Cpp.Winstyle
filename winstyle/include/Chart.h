@@ -80,11 +80,11 @@ namespace wstyle {
 		cList Values;
 		cIt Find(PCTCH tit);
 		void Clone(const Chart& c);
+		RECT DrawRect;
 	public:
 		Background Background;
-		RECT DrawRect;
 		Text Text;
-		bool SetVisible;
+		bool Visible;
 		bool ShowPercent;
 		bool ShowValues;
 		Chart();

@@ -49,7 +49,7 @@
 	return owner->DeleteValue(Title.c_str());
 }
 
- wstyle::Chart::Chart() : SetVisible(true), ShowPercent(true), ShowValues(false), maxValue(0), sumValue(0) {
+ wstyle::Chart::Chart() : Visible(true), ShowPercent(true), ShowValues(false), maxValue(0), sumValue(0) {
 	title = TEXT("Chart");
 	DrawRect.left = DrawRect.top = DrawRect.right = DrawRect.bottom = 0;
 }
@@ -68,7 +68,7 @@ size_t wstyle::Chart::Size() const { return Values.size(); }
 	SetTitle(c.title.c_str());
 	for (size_t i = 0; i < c.Values.size(); i++)
 		AddValue(c.Values[i].Title.c_str(), c.Values[i].Value, c.Values[i].Color);
-	SetVisible = c.SetVisible;
+	Visible = c.Visible;
 	ShowPercent = c.ShowPercent;
 	ShowValues = c.ShowValues;
 	Text = c.Text;
@@ -138,7 +138,7 @@ size_t wstyle::Chart::Size() const { return Values.size(); }
 }
 
  bool wstyle::Chart::Paint(HDC hdc) {
-	if (!SetVisible)
+	if (!Visible)
 		return true;
 	if (!hdc || (DrawRect.top == 0 && DrawRect.left == 0 && DrawRect.right == 0 && DrawRect.bottom == 0))
 		return false;

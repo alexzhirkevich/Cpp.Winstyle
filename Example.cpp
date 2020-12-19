@@ -14,27 +14,24 @@ using namespace wstyle;
 class Form : public Window {
 
 	Button* btn = new Button(this);
-	Chart* chart = new Chart(_T("Автомобиль какой фирмы вы используете?"));
+	Chart* chart = new Chart(_T("Which car do you use?"));
 	MenuBar* menuBar = new MenuBar();
 	Menu* menu = new Menu(TEXT("File"));
-
 	MenuItem* menuItem = new MenuItem(TEXT("Quit"));
 
 
-	bool draw = false;
+
 
 	LRESULT OnCreate(WPARAM wParam, LPARAM lParam) override {
 		
 		menuItem->addActionListener(new AbstractAction([] { PostQuitMessage(EXIT_SUCCESS); }, true));
-	//	menuItem->SetEnabled(false);
 		menu->add(menuItem);
 		menuBar->add(menu);
 		menuBar->set(this);
-	
 
-		btn->SetText(TEXT("Построить диаграмму"));
+		btn->SetText(TEXT("Build diagram"));
 		btn->SetBounds(Get.Width() / 2 - 150, Get.Height() / 2 - 50, 150, 50);
-		btn->addActionListener(new AbstractAction([&]() { btn->SetVisible(false); draw = true; Update(); },true));
+		btn->addActionListener(new AbstractAction([&]() { btn->SetVisible(false); chart->Visible = true;  Update(); }, true));
 
 		chart->Background.Color = Color(CLR_SKYBLUE, PS_SOLID, 5);
 		chart->Text.Title.Font = Font(30, 800, TEXT("Times"));
@@ -44,18 +41,16 @@ class Form : public Window {
 		chart->AddValue(TEXT("Toyota"), 800, Color(CLR_RED, PS_SOLID, 5));
 		chart->AddValue(TEXT("Mazda"), 966, Color(CLR_YELLOW, PS_SOLID, 5));
 		chart->AddValue(TEXT("Ford"), 1024, Color(CLR_BROWN, PS_SOLID, 5));
-		chart->AddValue(TEXT("ВАЗ"), 321, Color(CLR_GREEN, PS_SOLID, 5));
-		chart->AddValue(TEXT("Другой"), 166, Color(CLR_INDIGO, PS_SOLID, 5));
+		chart->AddValue(TEXT("BMW"), 321, Color(CLR_GREEN, PS_SOLID, 5));
+		chart->AddValue(TEXT("Peugeout"), 166, Color(CLR_INDIGO, PS_SOLID, 5));
 		chart->Sort([](wstyle::Chart::ChartItem a, Chart::ChartItem b) { return a.Value > b.Value; });
-
+		chart->Visible = false;
 		return 0;
 	};
 
 	LRESULT OnPaint(WPARAM wParam, LPARAM lParam) override {
-		if (draw) {
 			chart->SetDrawRect(Get.ClientRect());
 			chart->Paint(GetPaintDC());
-		}
 		return 0;
 	}
 	
