@@ -19,9 +19,6 @@ class Form : public Window {
 	Menu* menu = new Menu(TEXT("File"));
 	MenuItem* menuItem = new MenuItem(TEXT("Quit"));
 
-
-
-
 	LRESULT OnCreate(WPARAM wParam, LPARAM lParam) override {
 		
 		menuItem->addActionListener(new AbstractAction([] { PostQuitMessage(EXIT_SUCCESS); }, true));
@@ -54,7 +51,7 @@ class Form : public Window {
 		return 0;
 	}
 	
-	~Form() { delete chart; }
+	~Form() { delete chart; delete btn; delete menuBar; delete menu; delete menuItem; }
 };
 
 int WINAPI WinMain(HINSTANCE hinstance, HINSTANCE, LPSTR lpCmdLine, int nCmdShow) {

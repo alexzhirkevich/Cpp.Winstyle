@@ -10,32 +10,32 @@ UINT wstyle::Window::number = 0;
 
 void wstyle::Window::Set::DoubleBufferring(bool b) const { owner->doubleBufferEnabled = b; }
 
- void wstyle::Window::Set::Icon(HICON hIcon) const {
+void wstyle::Window::Set::Icon(HICON hIcon) const {
 	owner->wc.hIcon = hIcon;
 	owner->wc.hIconSm = hIcon;
 	SetClassLongPtr(owner->hWnd, GCLP_HICON, reinterpret_cast<LONG>(hIcon));
 }
- void wstyle::Window::Set::Cursor(HCURSOR hCursor) const {
+void wstyle::Window::Set::Cursor(HCURSOR hCursor) const {
 	owner->wc.hCursor = hCursor;
 	SetClassLongPtr(owner->hWnd, GCLP_HCURSOR, (LONG)hCursor);
 }
- void wstyle::Window::Set::MenuBar(wstyle::MenuBar* mb) const {
-	 owner->menuBar = mb;
-	 
- }
- void wstyle::Window::Set::Style(DWORD style) const {
+void wstyle::Window::Set::MenuBar(wstyle::MenuBar* mb) const {
+	owner->menuBar = mb;
+
+}
+void wstyle::Window::Set::Style(DWORD style) const {
 	owner->style = style;
 	SetWindowLongPtr(owner->hWnd, GWL_STYLE, style);
 }
- void wstyle::Window::Set::Title(PCTCH title) const {
+void wstyle::Window::Set::Title(PCTCH title) const {
 	owner->title = title;
 	SetWindowText(owner->hWnd, title);
 }
- void wstyle::Window::Set::Parent(Window* parent) const {
+void wstyle::Window::Set::Parent(Window* parent) const {
 	SetParent(this->owner->hWnd, parent->hWnd);
 	owner->parent = parent;
 }
- void wstyle::Window::Set::SetVisible(bool isVisible) const {
+void wstyle::Window::Set::SetVisible(bool isVisible) const {
 	if (!owner->hWnd)
 		return;
 	if (isVisible)
@@ -44,30 +44,30 @@ void wstyle::Window::Set::DoubleBufferring(bool b) const { owner->doubleBufferEn
 		ShowWindow(owner->hWnd, SW_HIDE);
 	owner->isVisible = isVisible;
 }
- void wstyle::Window::Set::Enable(bool isEnabled) const {
+void wstyle::Window::Set::Enable(bool isEnabled) const {
 	if (!owner->hWnd)
 		return;
 	EnableWindow(owner->hWnd, isEnabled);
 	owner->isEnabled = isEnabled;
 }
 
- int wstyle::Window::Get::Width() const { return owner->width; }
- int wstyle::Window::Get::Height() const { return owner->height; }
- RECT wstyle::Window::Get::ClientRect() const { RECT r; GetClientRect(owner->hWnd, &r); return r; }
- HICON wstyle::Window::Get::Icon() const { return owner->wc.hIcon; }
- HCURSOR wstyle::Window::Get::Cursor() const { return owner->wc.hCursor; }
- _tstring wstyle::Window::Get::Title() const { return owner->title; }
- void wstyle::Window::Get::MenuBar(PTCHAR buffer) const { _tcscpy_s(buffer, _tcslen(owner->wc.lpszMenuName), owner->wc.lpszMenuName); }
- DWORD wstyle::Window::Get::Style() const { return owner->style; }
- _tstring wstyle::Window::Get::WndClassName() const { return owner->wc.lpszClassName; }
- HBRUSH wstyle::Window::Get::BgBrush() const { return owner->wc.hbrBackground; }
- wstyle::Window* wstyle::Window::Get::Parent() const { return owner->parent; }
- HDC wstyle::Window::Get::HDC() const { return GetDC(owner->hWnd); }
- HWND wstyle::Window::Get::hWnd() const { return owner->hWnd; }
- bool wstyle::Window::Get::SetVisible() const { return owner->isVisible; }
- bool wstyle::Window::Get::Enabled() const { return owner->isEnabled; }
+int wstyle::Window::Get::Width() const { return owner->width; }
+int wstyle::Window::Get::Height() const { return owner->height; }
+RECT wstyle::Window::Get::ClientRect() const { RECT r; GetClientRect(owner->hWnd, &r); return r; }
+HICON wstyle::Window::Get::Icon() const { return owner->wc.hIcon; }
+HCURSOR wstyle::Window::Get::Cursor() const { return owner->wc.hCursor; }
+_tstring wstyle::Window::Get::Title() const { return owner->title; }
+void wstyle::Window::Get::MenuBar(PTCHAR buffer) const { _tcscpy_s(buffer, _tcslen(owner->wc.lpszMenuName), owner->wc.lpszMenuName); }
+DWORD wstyle::Window::Get::Style() const { return owner->style; }
+_tstring wstyle::Window::Get::WndClassName() const { return owner->wc.lpszClassName; }
+HBRUSH wstyle::Window::Get::BgBrush() const { return owner->wc.hbrBackground; }
+wstyle::Window* wstyle::Window::Get::Parent() const { return owner->parent; }
+HDC wstyle::Window::Get::HDC() const { return GetDC(owner->hWnd); }
+HWND wstyle::Window::Get::hWnd() const { return owner->hWnd; }
+bool wstyle::Window::Get::SetVisible() const { return owner->isVisible; }
+bool wstyle::Window::Get::Enabled() const { return owner->isEnabled; }
 
- wstyle::Window::Window() : hWnd(nullptr), parent(nullptr),
+wstyle::Window::Window() : hWnd(nullptr), parent(nullptr),
 _nCmdShow(SW_SHOW), Set(this), Get(this), doubleBufferEnabled(true),
 isVisible(true), isEnabled(true), isPainting(true) {
 	className = TEXT("MyApp");
@@ -81,7 +81,7 @@ isVisible(true), isEnabled(true), isPainting(true) {
 wstyle::Window::Window(const Window& window) : Window() { Clone(window); };
 
 
- wstyle::Window& wstyle::Window::operator = (const Window& window) {
+wstyle::Window& wstyle::Window::operator = (const Window& window) {
 	if (this == &window)
 		return *this;
 	Destroy();
@@ -89,7 +89,7 @@ wstyle::Window::Window(const Window& window) : Window() { Clone(window); };
 	return *this;
 };
 
- void wstyle::Window::Destroy() {
+void wstyle::Window::Destroy() {
 	DestroyWindow(hWnd);
 	UnregisterClass(wc.lpszClassName, wc.hInstance);
 	parent = nullptr;
@@ -97,7 +97,7 @@ wstyle::Window::Window(const Window& window) : Window() { Clone(window); };
 	//std::for_each(controls.begin(), controls.end(), [](Control* c) { c->Delete(); });
 }
 
- bool wstyle::Window::Create(HINSTANCE _hInstance, PCTCH _title, UINT _width, UINT _height,
+bool wstyle::Window::Create(HINSTANCE _hInstance, PCTCH _title, UINT _width, UINT _height,
 	UINT nCmdShow, DWORD _style, Window* parent, PCTCH lpszMenuName) {
 	style = _style;
 	width = _width;
@@ -127,7 +127,7 @@ wstyle::Window::Window(const Window& window) : Window() { Clone(window); };
 	return true;
 }
 
- bool wstyle::Window::Register() {
+bool wstyle::Window::Register() {
 	if (!RegisterClassEx(&wc))
 		return false;
 
@@ -135,10 +135,10 @@ wstyle::Window::Window(const Window& window) : Window() { Clone(window); };
 		(GetSystemMetrics(SM_CXSCREEN) - width) / 2, (GetSystemMetrics(SM_CYSCREEN) - height) / 2,
 		width, height, parent ? parent->Get.hWnd() : nullptr, LoadMenu(wc.hInstance, wc.lpszMenuName), wc.hInstance, nullptr);
 
-	return (hWnd !=nullptr && hWnd != INVALID_HANDLE_VALUE);
+	return (hWnd != nullptr && hWnd != INVALID_HANDLE_VALUE);
 }
 
- void wstyle::Window::Clone(const Window& w) {
+void wstyle::Window::Clone(const Window& w) {
 	title = w.title;
 	parent = w.parent;
 	style = w.style;
@@ -166,14 +166,14 @@ wstyle::Window::Window(const Window& window) : Window() { Clone(window); };
 	Register();
 }
 
- HDC wstyle::Window::StartPaint() {
+HDC wstyle::Window::StartPaint() {
 	isPainting = true;
 	if (doubleBufferEnabled)
 		return paintBuffer.Open(hWnd, wc.hbrBackground);
 	return paintBuffer.Open(hWnd, wc.hbrBackground, false);
 }
 
- HDC wstyle::Window::GetPaintDC() const {
+HDC wstyle::Window::GetPaintDC() const {
 	if (isPainting)
 		return (paintBuffer.GetDC());
 	else
@@ -182,24 +182,24 @@ wstyle::Window::Window(const Window& window) : Window() { Clone(window); };
 
 wstyle::Window::~Window() { Destroy(); }
 
- void wstyle::Window::EndPaint() {
+void wstyle::Window::EndPaint() {
 	paintBuffer.Close();
 	isPainting = false;
 }
 
- bool wstyle::Window::AddControl(Control* c) {
-	 if (c)
-		 for (auto i = controls.begin(); i != controls.end(); i++) {
-			 if (*i == c)
-				 false;
-		 }
-	 else
-		 return false;
-	 controls.push_back(c);;
-	 return true;
- }
+bool wstyle::Window::AddControl(Control* c) {
+	if (c)
+		for (auto i = controls.begin(); i != controls.end(); i++) {
+			if (*i == c)
+				false;
+		}
+	else
+		return false;
+	controls.push_back(c);;
+	return true;
+}
 
-  void wstyle::Window::Run(bool newThread)
+void wstyle::Window::Run(bool newThread)
 {
 	UpdateWindow(hWnd);
 	ShowWindow(hWnd, _nCmdShow);
@@ -238,7 +238,7 @@ void wstyle::Window::Update()
 bool wstyle::Window::RemoveControl(Control* c)
 {
 	for (auto i = controls.begin(); i != controls.end(); i++) {
-		if (*i==c) {
+		if (*i == c) {
 			controls.erase(i);
 			return true;
 		}
@@ -253,7 +253,7 @@ LRESULT __stdcall wstyle::Window::static_WndProc(HWND hWnd, UINT uMsg, WPARAM wP
 	__try {
 		return w->WindowProc(hWnd, uMsg, wParam, lParam);
 	}
-	__except(EXCEPTION_EXECUTE_HANDLER) {
+	__except (EXCEPTION_EXECUTE_HANDLER) {
 		return DefWindowProc(hWnd, uMsg, wParam, lParam);
 	}
 }
@@ -1617,29 +1617,29 @@ LRESULT wstyle::Window::WindowProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM l
 	case WM_XBUTTONUP:
 		return OnXButtonUp(wParam, lParam);
 	case WM_COMMAND: {
-			std::for_each(controls.begin(), controls.end(), [=](Control* c) {
-				if (c->GetMenuID() == LOWORD(wParam) && c->action)
+		std::for_each(controls.begin(), controls.end(), [=](Control* c) {
+			if (c->GetMenuID() == LOWORD(wParam) && c->action)
+				if (c->action->isAsync())
+					std::thread([&] {c->action->execute(); }).detach();
+				else
+					c->action->execute();
+			});
+		std::for_each(menuBar->menuItems.begin(), menuBar->menuItems.end(), [&](MenuItem* c) {
+			if (c->id == LOWORD(wParam) && c->action)
+				if (c->action->isAsync())
+					std::thread([&] {c->action->execute(); }).detach();
+				else
+					c->action->execute();
+			});
+		std::for_each(menuBar->menus.begin(), menuBar->menus.end(), [&](Menu* mi) {
+			std::for_each(mi->items.begin(), mi->items.end(), [&](MenuItem* c) {
+				if (c->id == LOWORD(wParam) && c->action)
 					if (c->action->isAsync())
 						std::thread([&] {c->action->execute(); }).detach();
 					else
 						c->action->execute();
 				});
-			std::for_each(menuBar->menuItems.begin(), menuBar->menuItems.end(), [&](MenuItem* c) {
-				if (c->id == LOWORD(wParam) && c->action) 
-					if (c->action->isAsync())
-						std::thread([&] {c->action->execute(); }).detach();
-					else
-						c->action->execute();
-				});
-			std::for_each(menuBar->menus.begin(), menuBar->menus.end(), [&](Menu* mi) {
-				std::for_each(mi->items.begin(), mi->items.end(), [&](MenuItem* c) {
-					if (c->id == LOWORD(wParam) && c->action)
-						if (c->action->isAsync())
-							std::thread([&] {c->action->execute(); }).detach();
-						else
-							c->action->execute();
-					});
-				});
+			});
 		break;
 	}
 	case WM_PAINT: {

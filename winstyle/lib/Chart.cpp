@@ -7,37 +7,37 @@
 #pragma warning(disable:4267)
 
 
- wstyle::Chart::ChartItem::ChartItem() : owner(nullptr) {
+wstyle::Chart::ChartItem::ChartItem() : owner(nullptr) {
 	Color.RandUnstable();
 	Value = 0;
 	Title = TEXT("Unknown");
 }
 
- wstyle::Chart::ChartItem::ChartItem(PCTCH _title, double _val, Chart* _owner) {
+wstyle::Chart::ChartItem::ChartItem(PCTCH _title, double _val, Chart* _owner) {
 	owner = _owner;
 	Value = _val;
 	Title = _title;
 }
 
- wstyle::Chart::ChartItem::ChartItem(PCTCH _title, double _val, Chart* _owner, wstyle::Color _clr) {
+wstyle::Chart::ChartItem::ChartItem(PCTCH _title, double _val, Chart* _owner, wstyle::Color _clr) {
 	owner = _owner;
 	Color = _clr;
 	Value = _val;
 	Title = _title;
 }
 
- void wstyle::Chart::ChartItem::Clone(const ChartItem& ci) {
+void wstyle::Chart::ChartItem::Clone(const ChartItem& ci) {
 	owner = ci.owner;
 	Color = ci.Color;
 	Value = ci.Value;
 	Title = ci.Title;
 }
 
- void wstyle::Chart::ChartItem::Erase() {
+void wstyle::Chart::ChartItem::Erase() {
 	Title = TEXT("Unknown");
 }
 
- wstyle::Chart::ChartItem& wstyle::Chart::ChartItem::operator =(const ChartItem& ci) {
+wstyle::Chart::ChartItem& wstyle::Chart::ChartItem::operator =(const ChartItem& ci) {
 	if (this == &ci)
 		return *this;
 	Erase();
@@ -45,26 +45,26 @@
 	return *this;
 }
 
- bool wstyle::Chart::ChartItem::RemoveFromChart() {
+bool wstyle::Chart::ChartItem::RemoveFromChart() {
 	return owner->DeleteValue(Title.c_str());
 }
 
- wstyle::Chart::Chart() : Visible(true), ShowPercent(true), ShowValues(false), maxValue(0), sumValue(0) {
+wstyle::Chart::Chart() : Visible(true), ShowPercent(true), ShowValues(false), maxValue(0), sumValue(0) {
 	title = TEXT("Chart");
 	DrawRect.left = DrawRect.top = DrawRect.right = DrawRect.bottom = 0;
 }
 
- wstyle::Chart::Chart(PCTCH _title) : Chart() {
+wstyle::Chart::Chart(PCTCH _title) : Chart() {
 	title = _title;
 }
 
- wstyle::Chart::Chart(PCTCH _title, RECT _drawRect) : Chart(_title) {
+wstyle::Chart::Chart(PCTCH _title, RECT _drawRect) : Chart(_title) {
 	DrawRect = _drawRect;
 }
 
 size_t wstyle::Chart::Size() const { return Values.size(); }
 
- void wstyle::Chart::Clone(const Chart& c) {
+void wstyle::Chart::Clone(const Chart& c) {
 	SetTitle(c.title.c_str());
 	for (size_t i = 0; i < c.Values.size(); i++)
 		AddValue(c.Values[i].Title.c_str(), c.Values[i].Value, c.Values[i].Color);
@@ -76,7 +76,7 @@ size_t wstyle::Chart::Size() const { return Values.size(); }
 	DrawRect = c.DrawRect;
 }
 
- wstyle::Chart& wstyle::Chart::operator=(const Chart& c) {
+wstyle::Chart& wstyle::Chart::operator=(const Chart& c) {
 	if (this == &c)
 		return *this;
 	Erase();
@@ -84,35 +84,35 @@ size_t wstyle::Chart::Size() const { return Values.size(); }
 	return *this;
 }
 
- void wstyle::Chart::SetTitle(PCTCH _title) {
+void wstyle::Chart::SetTitle(PCTCH _title) {
 	title = _title;
 }
 
- void wstyle::Chart::SetDrawRect(RECT _drawRect) {
+void wstyle::Chart::SetDrawRect(RECT _drawRect) {
 	DrawRect = _drawRect;
 }
 
- void wstyle::Chart::AddValue(PCTCH title, double value) {
+void wstyle::Chart::AddValue(PCTCH title, double value) {
 	Values.push_back(ChartItem(title, value, this));
 	sumValue += value;
 	if (value > maxValue)
 		maxValue = value;
 }
 
- void wstyle::Chart::AddValue(PCTCH title, double value, const Color& clr) {
+void wstyle::Chart::AddValue(PCTCH title, double value, const Color& clr) {
 	Values.push_back(ChartItem(title, value, this, clr));
 	sumValue += value;
 	if (value > maxValue)
 		maxValue = value;
 }
 
- wstyle::Chart::ChartItem& wstyle::Chart::operator [](int index) {
+wstyle::Chart::ChartItem& wstyle::Chart::operator [](int index) {
 	if (index >= (int)Values.size() || index < 0)
 		throw WstyleException(TEXT("Chart error: operator[] - invalid index"));
 	return Values[index];
 }
 
- wstyle::Chart::cIt wstyle::Chart::Find(PCTCH tit) {
+wstyle::Chart::cIt wstyle::Chart::Find(PCTCH tit) {
 	for (cIt i = Values.begin(); i != Values.end(); i++)
 		if (i->Title == tit) {
 			return i;
@@ -120,13 +120,13 @@ size_t wstyle::Chart::Size() const { return Values.size(); }
 	return Values.end();
 }
 
- bool wstyle::Chart::DeleteValue(PCTCH _title) {
+bool wstyle::Chart::DeleteValue(PCTCH _title) {
 	cIt delIt = Find(_title);
 	if (delIt != Values.end()) {
 		if (delIt->Value == maxValue && Size() > 1) {
 			maxValue = (this->operator[](0)).Value;
 			delIt->Value = maxValue;
-			for (int i = 0; i < Size(); i++) {
+			for (size_t i = 0; i < Size(); i++) {
 				if (this->operator[](i).Value > maxValue)
 					maxValue = this->operator[](i).Value;
 			}
@@ -137,7 +137,7 @@ size_t wstyle::Chart::Size() const { return Values.size(); }
 	return false;
 }
 
- bool wstyle::Chart::Paint(HDC hdc) {
+bool wstyle::Chart::Paint(HDC hdc) {
 	if (!Visible)
 		return true;
 	if (!hdc || (DrawRect.top == 0 && DrawRect.left == 0 && DrawRect.right == 0 && DrawRect.bottom == 0))
@@ -150,11 +150,11 @@ size_t wstyle::Chart::Size() const { return Values.size(); }
 	HPEN hPrevPen = obj.second;
 	int prevBkMode = SetBkMode(hdc, Background.Mode);
 	COLORREF prevTextColor = SetTextColor(hdc, Text.Title.Color);
-	if (Background.SetVisible) 
+	if (Background.SetVisible)
 		Rectangle(hdc, DrawRect.left, DrawRect.top, DrawRect.right, DrawRect.bottom);
 	if (Text.Items.Font.Get.Height() + Text.Title.Font.Get.Height() + 2 * Background.Color.Get.PenWidth() < DrawRect.bottom - DrawRect.top) {
 		if (Text.Title.SetVisible)
-			DrawText(hdc, title.c_str(), title.length()+1, &DrawRect, DT_CENTER | DT_TOP | DT_SINGLELINE);
+			DrawText(hdc, title.c_str(), title.length() + 1, &DrawRect, DT_CENTER | DT_TOP | DT_SINGLELINE);
 	}
 	else
 	{
@@ -162,7 +162,7 @@ size_t wstyle::Chart::Size() const { return Values.size(); }
 		SelectFont(hdc, hPrevFont);
 		SelectBrush(hdc, hPrevBrush);
 		SelectPen(hdc, hPrevPen);
-		DrawText(hdc, TEXT("Not enough space"), _tcslen(TEXT("Not enough space"))+1, &DrawRect, DT_CENTER | DT_VCENTER | DT_SINGLELINE);
+		DrawText(hdc, TEXT("Not enough space"), _tcslen(TEXT("Not enough space")) + 1, &DrawRect, DT_CENTER | DT_VCENTER | DT_SINGLELINE);
 		return false;
 	}
 	if (Values.size() > 0)
@@ -181,22 +181,22 @@ size_t wstyle::Chart::Size() const { return Values.size(); }
 			Rectangle(hdc, tRect.left, tRect.top, tRect.right, tRect.bottom);
 			if (ShowPercent && !ShowValues) {
 				_tstring s = to_tstring((int)(Values[i].Value / sumValue * 100.0)).append("%");
-				DrawText(hdc, s.c_str(),s.size()+1, &tRect, DT_CENTER | DT_VCENTER | DT_SINGLELINE);
-				
+				DrawText(hdc, s.c_str(), s.size() + 1, &tRect, DT_CENTER | DT_VCENTER | DT_SINGLELINE);
+
 			}
 			else
-				if (!ShowPercent && ShowValues){ 
+				if (!ShowPercent && ShowValues) {
 					_tstring str = to_tstring((int)Values[i].Value);
-					DrawText(hdc, str.c_str(), str.size()+1, &tRect, DT_CENTER | DT_VCENTER | DT_SINGLELINE);
+					DrawText(hdc, str.c_str(), str.size() + 1, &tRect, DT_CENTER | DT_VCENTER | DT_SINGLELINE);
 				}
 				else
 					if (ShowPercent && ShowValues) {
 						_tstring str = to_tstring((int)Values[i].Value);
 						tRect.top -= Text.Items.Font.Get.Height();
-						DrawText(hdc, str.c_str(), str.length()+1, &tRect, DT_CENTER | DT_VCENTER | DT_SINGLELINE);
+						DrawText(hdc, str.c_str(), str.length() + 1, &tRect, DT_CENTER | DT_VCENTER | DT_SINGLELINE);
 						tRect.top += 2 * Text.Items.Font.Get.Height();
 						str = to_tstring((int)(Values[i].Value / sumValue * 100.0)).append(TEXT("%"));
-						DrawText(hdc, str.c_str(), str.size()+1, &tRect, DT_CENTER | DT_VCENTER | DT_SINGLELINE);
+						DrawText(hdc, str.c_str(), str.size() + 1, &tRect, DT_CENTER | DT_VCENTER | DT_SINGLELINE);
 					}
 			tRect.left -= (LONG)(step / 2);
 			tRect.right += (LONG)(step / 2);
@@ -213,15 +213,15 @@ size_t wstyle::Chart::Size() const { return Values.size(); }
 	return true;
 }
 
- void wstyle::Chart::Erase() {
+void wstyle::Chart::Erase() {
 	Values.clear();
 }
 
- void wstyle::Chart::Sort(bool (*Pred)(ChartItem first, ChartItem second)) {
+void wstyle::Chart::Sort(bool (*Pred)(ChartItem first, ChartItem second)) {
 	std::sort(Values.begin(), Values.end(), Pred);
 }
 
- void wstyle::Chart::Sort(BOOL(*Pred)(ChartItem first, ChartItem second)) {
+void wstyle::Chart::Sort(BOOL(*Pred)(ChartItem first, ChartItem second)) {
 	std::sort(Values.begin(), Values.end(), Pred);
 }
 

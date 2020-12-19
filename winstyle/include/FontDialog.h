@@ -1,7 +1,7 @@
 //
 // FontDialog.h
 //
-//      Copyright (c) Alexandr Zhirkevich. All rights reserved.
+//      By Alexandr Zhirkevich.
 //		E-mail: mailto:sasha.zhirkevich@yandex.ru;
 //		Vk: https://vk.com/id175640630;
 //		Telegram: @alexzhirkevich.
@@ -29,7 +29,7 @@ namespace wstyle {
 	protected:
 		CHOOSEFONT cf;
 		LOGFONT lf;
-		void Clone(const FontDialog fd);
+		void Clone(const FontDialog& fd);
 	public:
 		FontDialog();
 		FontDialog(HWND hWnd, HINSTANCE hInstance = nullptr);

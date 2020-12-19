@@ -1,7 +1,7 @@
 //
 // MenuBar.h
 //
-//      Copyright (c) Alexandr Zhirkevich. All rights reserved.
+//      By Alexandr Zhirkevich.
 //		E-mail: mailto:sasha.zhirkevich@yandex.ru;
 //		Vk: https://vk.com/id175640630;
 //		Telegram: @alexzhirkevich.
@@ -38,19 +38,15 @@ namespace wstyle {
 		
 	protected:
 		MenuBar* owner;
-
 		std::vector<MenuItem*> items;
-
-		~Menu();
 
 	public:
 
 		Menu();
 		Menu(PCTCH title);
-
 		bool add(MenuItem* mi);
-
 		void Delete();
+		~Menu();
 	};
 
 }

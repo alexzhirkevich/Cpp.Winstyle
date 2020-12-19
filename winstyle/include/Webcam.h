@@ -1,7 +1,7 @@
 //
 // Webcam.h
 //
-//      Copyright (c) Alexandr Zhirkevich. All rights reserved.
+//      By Alexandr Zhirkevich.
 //		E-mail: mailto:sasha.zhirkevich@yandex.ru;
 //		Vk: https://vk.com/id175640630;
 //		Telegram: @alexzhirkevich.

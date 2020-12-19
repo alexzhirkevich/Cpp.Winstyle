@@ -1,7 +1,7 @@
 //
 // MenuItem.h
 //
-//      Copyright (c) Alexandr Zhirkevich. All rights reserved.
+//      By Alexandr Zhirkevich. 
 //		E-mail: mailto:sasha.zhirkevich@yandex.ru;
 //		Vk: https://vk.com/id175640630;
 //		Telegram: @alexzhirkevich.
@@ -37,25 +37,21 @@ namespace wstyle {
 
 	protected:
 		Menu* owner;
-
 		HMENU hMenu;
 		bool enabled;
 		_tstring title;
 		int id;
-
 		const AbstractAction* action;
-		virtual ~MenuItem();
 
 	public:
 		MenuItem();
 		MenuItem(PCTCH title);
-
 		void SetText(PCTCH text);
 		_tstring GetText();
 		bool SetEnabled(bool enabled);
 		void addActionListener(const AbstractAction* aa);
-
 		virtual void Delete();
+		virtual ~MenuItem();
 	};
 
 }

@@ -1,6 +1,6 @@
 #include "../include/FontDialog.h"
 
- void wstyle::FontDialog::Clone(const FontDialog fd) {
+ void wstyle::FontDialog::Clone(const FontDialog& fd) {
 	cf = fd.cf;
 	lf = fd.lf;
 	_tcscpy_s(lf.lfFaceName, _tcslen(fd.lf.lfFaceName)*sizeof(TCHAR), fd.lf.lfFaceName);
