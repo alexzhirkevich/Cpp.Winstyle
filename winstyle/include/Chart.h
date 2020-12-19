@@ -51,21 +51,21 @@ namespace wstyle {
 		struct Background {
 			int Mode;
 			Color Color;
-			bool Visible;
-			Background() : Visible(true), Mode(TRANSPARENT) {};
+			bool SetVisible;
+			Background() : SetVisible(true), Mode(TRANSPARENT) {};
 		};
 		struct Text {
 			struct Title {
 				COLORREF Color;
 				Font Font;
-				bool Visible;
-				Title() : Visible(true), Color(RGB(0, 0, 0)) {};
+				bool SetVisible;
+				Title() : SetVisible(true), Color(RGB(0, 0, 0)) {};
 			};
 			struct Items {
 				COLORREF Color;
 				Font Font;
-				bool Visible;
-				Items() : Visible(true), Color(RGB(0, 0, 0)) {};
+				bool SetVisible;
+				Items() : SetVisible(true), Color(RGB(0, 0, 0)) {};
 			};
 			Title Title;
 			Items Items;
@@ -84,13 +84,13 @@ namespace wstyle {
 		Background Background;
 		RECT DrawRect;
 		Text Text;
-		bool Visible;
+		bool SetVisible;
 		bool ShowPercent;
 		bool ShowValues;
 		Chart();
 		Chart(PCTCH title);
 		Chart(PCTCH title, RECT drawRect);
-		int Size() const { return Values.size(); }
+		size_t Size() const;
 		Chart(const Chart& c) :Chart() { Clone(c); }
 		Chart& operator = (const Chart& c);
 		void SetTitle(PCTCH title);

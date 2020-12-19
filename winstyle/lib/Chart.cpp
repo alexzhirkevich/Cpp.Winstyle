@@ -1,36 +1,43 @@
 #include "../include/Chart.h"
 
-inline wstyle::Chart::ChartItem::ChartItem() : owner(nullptr) {
+#if defined _MSC_VER && _MSC_VER >=1200
+#pragma warning(push)
+#endif
+
+#pragma warning(disable:4267)
+
+
+ wstyle::Chart::ChartItem::ChartItem() : owner(nullptr) {
 	Color.RandUnstable();
 	Value = 0;
 	Title = TEXT("Unknown");
 }
 
-inline wstyle::Chart::ChartItem::ChartItem(PCTCH _title, double _val, Chart* _owner) {
+ wstyle::Chart::ChartItem::ChartItem(PCTCH _title, double _val, Chart* _owner) {
 	owner = _owner;
 	Value = _val;
 	Title = _title;
 }
 
-inline wstyle::Chart::ChartItem::ChartItem(PCTCH _title, double _val, Chart* _owner, wstyle::Color _clr) {
+ wstyle::Chart::ChartItem::ChartItem(PCTCH _title, double _val, Chart* _owner, wstyle::Color _clr) {
 	owner = _owner;
 	Color = _clr;
 	Value = _val;
 	Title = _title;
 }
 
-inline void wstyle::Chart::ChartItem::Clone(const ChartItem& ci) {
+ void wstyle::Chart::ChartItem::Clone(const ChartItem& ci) {
 	owner = ci.owner;
 	Color = ci.Color;
 	Value = ci.Value;
 	Title = ci.Title;
 }
 
-inline void wstyle::Chart::ChartItem::Erase() {
+ void wstyle::Chart::ChartItem::Erase() {
 	Title = TEXT("Unknown");
 }
 
-inline wstyle::Chart::ChartItem& wstyle::Chart::ChartItem::operator =(const ChartItem& ci) {
+ wstyle::Chart::ChartItem& wstyle::Chart::ChartItem::operator =(const ChartItem& ci) {
 	if (this == &ci)
 		return *this;
 	Erase();
@@ -38,28 +45,30 @@ inline wstyle::Chart::ChartItem& wstyle::Chart::ChartItem::operator =(const Char
 	return *this;
 }
 
-inline bool wstyle::Chart::ChartItem::RemoveFromChart() {
+ bool wstyle::Chart::ChartItem::RemoveFromChart() {
 	return owner->DeleteValue(Title.c_str());
 }
 
-inline wstyle::Chart::Chart() : Visible(true), ShowPercent(true), ShowValues(false), maxValue(0), sumValue(0) {
+ wstyle::Chart::Chart() : SetVisible(true), ShowPercent(true), ShowValues(false), maxValue(0), sumValue(0) {
 	title = TEXT("Chart");
 	DrawRect.left = DrawRect.top = DrawRect.right = DrawRect.bottom = 0;
 }
 
-inline wstyle::Chart::Chart(PCTCH _title) : Chart() {
+ wstyle::Chart::Chart(PCTCH _title) : Chart() {
 	title = _title;
 }
 
-inline wstyle::Chart::Chart(PCTCH _title, RECT _drawRect) : Chart(_title) {
+ wstyle::Chart::Chart(PCTCH _title, RECT _drawRect) : Chart(_title) {
 	DrawRect = _drawRect;
 }
 
-inline void wstyle::Chart::Clone(const Chart& c) {
+size_t wstyle::Chart::Size() const { return Values.size(); }
+
+ void wstyle::Chart::Clone(const Chart& c) {
 	SetTitle(c.title.c_str());
 	for (size_t i = 0; i < c.Values.size(); i++)
 		AddValue(c.Values[i].Title.c_str(), c.Values[i].Value, c.Values[i].Color);
-	Visible = c.Visible;
+	SetVisible = c.SetVisible;
 	ShowPercent = c.ShowPercent;
 	ShowValues = c.ShowValues;
 	Text = c.Text;
@@ -67,7 +76,7 @@ inline void wstyle::Chart::Clone(const Chart& c) {
 	DrawRect = c.DrawRect;
 }
 
-inline wstyle::Chart& wstyle::Chart::operator=(const Chart& c) {
+ wstyle::Chart& wstyle::Chart::operator=(const Chart& c) {
 	if (this == &c)
 		return *this;
 	Erase();
@@ -75,35 +84,35 @@ inline wstyle::Chart& wstyle::Chart::operator=(const Chart& c) {
 	return *this;
 }
 
-inline void wstyle::Chart::SetTitle(PCTCH _title) {
+ void wstyle::Chart::SetTitle(PCTCH _title) {
 	title = _title;
 }
 
-inline void wstyle::Chart::SetDrawRect(RECT _drawRect) {
+ void wstyle::Chart::SetDrawRect(RECT _drawRect) {
 	DrawRect = _drawRect;
 }
 
-inline void wstyle::Chart::AddValue(PCTCH title, double value) {
+ void wstyle::Chart::AddValue(PCTCH title, double value) {
 	Values.push_back(ChartItem(title, value, this));
 	sumValue += value;
 	if (value > maxValue)
 		maxValue = value;
 }
 
-inline void wstyle::Chart::AddValue(PCTCH title, double value, const Color& clr) {
+ void wstyle::Chart::AddValue(PCTCH title, double value, const Color& clr) {
 	Values.push_back(ChartItem(title, value, this, clr));
 	sumValue += value;
 	if (value > maxValue)
 		maxValue = value;
 }
 
-inline wstyle::Chart::ChartItem& wstyle::Chart::operator [](int index) {
+ wstyle::Chart::ChartItem& wstyle::Chart::operator [](int index) {
 	if (index >= (int)Values.size() || index < 0)
 		throw WstyleException(TEXT("Chart error: operator[] - invalid index"));
 	return Values[index];
 }
 
-inline wstyle::Chart::cIt wstyle::Chart::Find(PCTCH tit) {
+ wstyle::Chart::cIt wstyle::Chart::Find(PCTCH tit) {
 	for (cIt i = Values.begin(); i != Values.end(); i++)
 		if (i->Title == tit) {
 			return i;
@@ -111,7 +120,7 @@ inline wstyle::Chart::cIt wstyle::Chart::Find(PCTCH tit) {
 	return Values.end();
 }
 
-inline bool wstyle::Chart::DeleteValue(PCTCH _title) {
+ bool wstyle::Chart::DeleteValue(PCTCH _title) {
 	cIt delIt = Find(_title);
 	if (delIt != Values.end()) {
 		if (delIt->Value == maxValue && Size() > 1) {
@@ -128,8 +137,8 @@ inline bool wstyle::Chart::DeleteValue(PCTCH _title) {
 	return false;
 }
 
-inline bool wstyle::Chart::Paint(HDC hdc) {
-	if (!Visible)
+ bool wstyle::Chart::Paint(HDC hdc) {
+	if (!SetVisible)
 		return true;
 	if (!hdc || (DrawRect.top == 0 && DrawRect.left == 0 && DrawRect.right == 0 && DrawRect.bottom == 0))
 		return false;
@@ -141,11 +150,11 @@ inline bool wstyle::Chart::Paint(HDC hdc) {
 	HPEN hPrevPen = obj.second;
 	int prevBkMode = SetBkMode(hdc, Background.Mode);
 	COLORREF prevTextColor = SetTextColor(hdc, Text.Title.Color);
-	if (Background.Visible)
+	if (Background.SetVisible) 
 		Rectangle(hdc, DrawRect.left, DrawRect.top, DrawRect.right, DrawRect.bottom);
 	if (Text.Items.Font.Get.Height() + Text.Title.Font.Get.Height() + 2 * Background.Color.Get.PenWidth() < DrawRect.bottom - DrawRect.top) {
-		if (Text.Title.Visible)
-			DrawText(hdc, title.c_str(), title.length(), &DrawRect, DT_CENTER | DT_TOP | DT_SINGLELINE);
+		if (Text.Title.SetVisible)
+			DrawText(hdc, title.c_str(), title.length()+1, &DrawRect, DT_CENTER | DT_TOP | DT_SINGLELINE);
 	}
 	else
 	{
@@ -153,7 +162,7 @@ inline bool wstyle::Chart::Paint(HDC hdc) {
 		SelectFont(hdc, hPrevFont);
 		SelectBrush(hdc, hPrevBrush);
 		SelectPen(hdc, hPrevPen);
-		DrawText(hdc, TEXT("Not enough space"), _tcslen(TEXT("Not enough space")), &DrawRect, DT_CENTER | DT_VCENTER | DT_SINGLELINE);
+		DrawText(hdc, TEXT("Not enough space"), _tcslen(TEXT("Not enough space"))+1, &DrawRect, DT_CENTER | DT_VCENTER | DT_SINGLELINE);
 		return false;
 	}
 	if (Values.size() > 0)
@@ -171,31 +180,23 @@ inline bool wstyle::Chart::Paint(HDC hdc) {
 			tRect.right = tRect.left + (LONG)step;
 			Rectangle(hdc, tRect.left, tRect.top, tRect.right, tRect.bottom);
 			if (ShowPercent && !ShowValues) {
-				PTCHAR tmp = new TCHAR[_tcslen(TEXT("100%")) + 1];
-				_tstring s;
-				_itot_s((int)(Values[i].Value / sumValue * 100.0), tmp, _tcslen(tmp), 10);
-				_tcscat_s(tmp,_tcslen(TEXT("%"))*sizeof(TCHAR), TEXT("%"));
-				DrawText(hdc, tmp, _tcslen(tmp), &tRect, DT_CENTER | DT_VCENTER | DT_SINGLELINE);
-				delete[] tmp;
+				_tstring s = to_tstring((int)(Values[i].Value / sumValue * 100.0)).append("%");
+				DrawText(hdc, s.c_str(),s.size()+1, &tRect, DT_CENTER | DT_VCENTER | DT_SINGLELINE);
+				
 			}
 			else
-				if (!ShowPercent && ShowValues) {
-					PTCHAR tmp = new TCHAR[256];
-					_itot_s((int)Values[i].Value, tmp, _tcslen(tmp), 10);
-					DrawText(hdc, tmp, _tcslen(tmp), &tRect, DT_CENTER | DT_VCENTER | DT_SINGLELINE);
-					delete[] tmp;
+				if (!ShowPercent && ShowValues){ 
+					_tstring str = to_tstring((int)Values[i].Value);
+					DrawText(hdc, str.c_str(), str.size()+1, &tRect, DT_CENTER | DT_VCENTER | DT_SINGLELINE);
 				}
 				else
 					if (ShowPercent && ShowValues) {
-						PTCHAR tmp = new TCHAR[256];
-						_itot_s((int)Values[i].Value, tmp,_tcslen(tmp), 10);
+						_tstring str = to_tstring((int)Values[i].Value);
 						tRect.top -= Text.Items.Font.Get.Height();
-						DrawText(hdc, tmp, _tcslen(tmp), &tRect, DT_CENTER | DT_VCENTER | DT_SINGLELINE);
+						DrawText(hdc, str.c_str(), str.length()+1, &tRect, DT_CENTER | DT_VCENTER | DT_SINGLELINE);
 						tRect.top += 2 * Text.Items.Font.Get.Height();
-						_itot_s((int)(Values[i].Value / sumValue * 100.0), tmp, _tcslen(tmp), 10);
-						_tcscat_s(tmp,_tcslen(TEXT("%")) * sizeof(TCHAR), TEXT("%"));
-						DrawText(hdc, tmp, _tcslen(tmp), &tRect, DT_CENTER | DT_VCENTER | DT_SINGLELINE);
-						delete[] tmp;
+						str = to_tstring((int)(Values[i].Value / sumValue * 100.0)).append(TEXT("%"));
+						DrawText(hdc, str.c_str(), str.size()+1, &tRect, DT_CENTER | DT_VCENTER | DT_SINGLELINE);
 					}
 			tRect.left -= (LONG)(step / 2);
 			tRect.right += (LONG)(step / 2);
@@ -212,14 +213,18 @@ inline bool wstyle::Chart::Paint(HDC hdc) {
 	return true;
 }
 
-inline void wstyle::Chart::Erase() {
+ void wstyle::Chart::Erase() {
 	Values.clear();
 }
 
-inline void wstyle::Chart::Sort(bool (*Pred)(ChartItem first, ChartItem second)) {
+ void wstyle::Chart::Sort(bool (*Pred)(ChartItem first, ChartItem second)) {
 	std::sort(Values.begin(), Values.end(), Pred);
 }
 
-inline void wstyle::Chart::Sort(BOOL(*Pred)(ChartItem first, ChartItem second)) {
+ void wstyle::Chart::Sort(BOOL(*Pred)(ChartItem first, ChartItem second)) {
 	std::sort(Values.begin(), Values.end(), Pred);
 }
+
+#if defined _MSC_VER && _MSC_VER >=1200
+#pragma warning(pop)
+#endif

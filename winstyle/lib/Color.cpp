@@ -27,7 +27,7 @@ wstyle::Color wstyle::Color::Select::Indigo() { owner->BrushRef = RGB(153, 51, 2
 wstyle::Color wstyle::Color::Select::Gray() { owner->BrushRef = RGB(128, 128, 128); owner->PenRef = RGB(89, 89, 89); owner->Restore(); return *owner; }
 wstyle::Color wstyle::Color::Select::Black() { owner->BrushRef = RGB(0, 0, 0); owner->PenRef = RGB(0, 0, 0); owner->Restore(); return *owner; }
 
-inline void wstyle::Color::Clone(const Color& c) {
+ void wstyle::Color::Clone(const Color& c) {
 	BrushRef = c.BrushRef;
 	PenRef = c.PenRef;
 	PenWidth = c.PenWidth;
@@ -35,7 +35,7 @@ inline void wstyle::Color::Clone(const Color& c) {
 	Restore();
 }
 
-inline wstyle::Color::Color() :Pen(nullptr), Brush(nullptr), Select(this), Set(this), Get(this) {
+ wstyle::Color::Color() :Pen(nullptr), Brush(nullptr), Select(this), Set(this), Get(this) {
 	if (!RandomizeActivated)
 	{
 		srand((unsigned int)time(NULL));
@@ -49,13 +49,13 @@ inline wstyle::Color::Color() :Pen(nullptr), Brush(nullptr), Select(this), Set(t
 	Pen = CreatePen(PenStyle, PenWidth, PenRef);
 }
 
-inline wstyle::Color::Color(int CLR_COLOR, int PenStyle, UINT PenWidth) : Color() {
+ wstyle::Color::Color(int CLR_COLOR, int PenStyle, UINT PenWidth) : Color() {
 	this->PenStyle = PenStyle;
 	this->PenWidth = PenWidth;
 	TranslateColor(CLR_COLOR);
 }
 
-inline wstyle::Color::Color(COLORREF brush, COLORREF pen, int PenStyle, UINT PenWidth) :Color() {
+ wstyle::Color::Color(COLORREF brush, COLORREF pen, int PenStyle, UINT PenWidth) :Color() {
 	this->PenStyle = PenStyle;
 	this->PenWidth = PenWidth;
 	BrushRef = brush;
@@ -68,7 +68,7 @@ std::pair<HBRUSH, HPEN> wstyle::Color::SetOnDC(HDC hdc) const {
 	return std::make_pair(SelectBrush(hdc, Brush), SelectPen(hdc, Pen));
 }
 
-inline wstyle::Color wstyle::Color::RandUnstable() {
+ wstyle::Color wstyle::Color::RandUnstable() {
 	int r = rand() % 256;
 	int g = rand() % 256;
 	int b = rand() % 256;
@@ -85,7 +85,7 @@ inline wstyle::Color wstyle::Color::RandUnstable() {
 	return *this;
 }
 
-inline void wstyle::Color::TranslateColor(int CLR_COLOR) {
+ void wstyle::Color::TranslateColor(int CLR_COLOR) {
 	switch (CLR_COLOR)
 	{
 	case CLR_RAND: RandStable(); return;
@@ -115,7 +115,7 @@ inline void wstyle::Color::TranslateColor(int CLR_COLOR) {
 	}
 }
 
-inline wstyle::Color& wstyle::Color::operator = (const Color& c) {
+ wstyle::Color& wstyle::Color::operator = (const Color& c) {
 	if (this == &c)
 		return *this;
 	Erase();
@@ -123,25 +123,25 @@ inline wstyle::Color& wstyle::Color::operator = (const Color& c) {
 	return *this;
 }
 
-inline wstyle::Color wstyle::Color::operator !() const {
+ wstyle::Color wstyle::Color::operator !() const {
 	Color c(PenRef, BrushRef, PenStyle, PenWidth);
 	return c;
 }
 
-inline wstyle::Color& wstyle::Color::operator+=(const Color& c) {
+ wstyle::Color& wstyle::Color::operator+=(const Color& c) {
 	BrushRef = RGB((Get.BrushRValue() + c.Get.BrushRValue()) / 2, (Get.BrushGValue() + c.Get.BrushGValue()) / 2, (Get.BrushBValue() + c.Get.BrushBValue()) / 2);
 	PenRef = RGB((Get.PenRValue() + c.Get.PenRValue()) / 2, (Get.PenGValue() + c.Get.PenGValue()) / 2, (Get.PenBValue() + c.Get.PenBValue()) / 2);
 	Restore();
 	return *this;
 }
 
-inline wstyle::Color wstyle::Color::operator+(const Color& c) const {
+ wstyle::Color wstyle::Color::operator+(const Color& c) const {
 	Color temp(*this);
 	temp += c;
 	return temp;
 }
 
-inline wstyle::Color& wstyle::Color::operator +=(int value) {
+ wstyle::Color& wstyle::Color::operator +=(int value) {
 
 	int red = Get.BrushRValue();
 	int green = Get.BrushGValue();
@@ -159,13 +159,13 @@ inline wstyle::Color& wstyle::Color::operator +=(int value) {
 	return *this;
 }
 
-inline wstyle::Color wstyle::Color::operator + (int value) const {
+ wstyle::Color wstyle::Color::operator + (int value) const {
 	Color temp(*this);
 	temp += value;
 	return temp;
 }
 
-inline wstyle::Color& wstyle::Color::operator -=(int value) {
+ wstyle::Color& wstyle::Color::operator -=(int value) {
 
 	int red = Get.BrushRValue();
 	int green = Get.BrushGValue();
@@ -183,13 +183,13 @@ inline wstyle::Color& wstyle::Color::operator -=(int value) {
 	return *this;
 }
 
-inline wstyle::Color wstyle::Color::operator - (int value) const {
+ wstyle::Color wstyle::Color::operator - (int value) const {
 	Color temp(*this);
 	temp -= value;
 	return temp;
 }
 
-inline wstyle::Color& wstyle::Color::operator ++ (void) {
+ wstyle::Color& wstyle::Color::operator ++ (void) {
 
 	int red = Get.PenRValue();
 	int green = Get.PenGValue();
@@ -207,12 +207,12 @@ inline wstyle::Color& wstyle::Color::operator ++ (void) {
 	return *this;
 }
 
-inline wstyle::Color& wstyle::Color::operator ++ (int) {
+ wstyle::Color& wstyle::Color::operator ++ (int) {
 	*this += 1;
 	return *this;
 }
 
-inline wstyle::Color& wstyle::Color::operator -- (void) {
+ wstyle::Color& wstyle::Color::operator -- (void) {
 
 	int red = Get.PenRValue();
 	int green = Get.PenGValue();
@@ -230,12 +230,12 @@ inline wstyle::Color& wstyle::Color::operator -- (void) {
 	return *this;
 }
 
-inline wstyle::Color& wstyle::Color::operator -- (int) {
+ wstyle::Color& wstyle::Color::operator -- (int) {
 	*this -= 1;
 	return *this;
 }
 
-inline wstyle::Color wstyle::Color::Default() {
+ wstyle::Color wstyle::Color::Default() {
 	BrushRef = RGB(255, 255, 255);
 	PenRef = RGB(0, 0, 0);
 	PenWidth = 1;
@@ -244,14 +244,14 @@ inline wstyle::Color wstyle::Color::Default() {
 	return *this;
 }
 
-inline void wstyle::Color::Erase() {
+ void wstyle::Color::Erase() {
 	DeleteBrush(Brush);
 	DeletePen(Pen);
 	Brush = nullptr;
 	Pen = nullptr;
 }
 
-inline void wstyle::Color::Restore() {
+ void wstyle::Color::Restore() {
 	DeleteBrush(Brush);
 	DeletePen(Pen);
 	Brush = CreateSolidBrush(BrushRef);

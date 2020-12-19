@@ -46,7 +46,7 @@
 		processorArchitecture='*' publicKeyToken='6595b64144ccf1df' language='*'\"")
 #endif //WSTYLE_OLD_INTERFACE
 
-#define WSTYLE_VER 25112020
+#define WSTYLE_VER 201127
 
 #define WSTYLE_MAXSTR		256
 
@@ -57,6 +57,7 @@
 #ifdef UNICODE
 #define WSTYLE_UNICODE_DEFINED true
 #define _tstring	std::wstring
+#define	to_tstring	std::to_wstring
 #define _tfstream	std::wfstream
 #define _tistream	std::wistream
 #define _tostream	std::wostream
@@ -65,6 +66,7 @@
 #else
 #define WSTYLE_UNICODE_DEFINED false
 #define _tstring	std::string
+#define to_tstring	std::to_string
 #define _tfstream	std::fstream
 #define _tistream	std::istream
 #define _tostream	std::ostream

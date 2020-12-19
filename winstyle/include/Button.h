@@ -31,7 +31,7 @@ namespace wstyle {
 		Button(Window* form);
 		Button(const Button& b);
 		Button& operator = (const Button& b);
-		bool SetStyle(DWORD style) override;
+		bool SetStyle(DWORD style);
 	};
 
 }

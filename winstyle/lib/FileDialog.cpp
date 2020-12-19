@@ -8,7 +8,7 @@
 
 #pragma warning(disable:4996)
 
-inline void wstyle::FileDialog::Clone(const FileDialog& fd) {
+ void wstyle::FileDialog::Clone(const FileDialog& fd) {
 	of = fd.of;
 	if (fd.buff) {
 		buff = new TCHAR[_tcslen(fd.buff) + 1];
@@ -17,7 +17,7 @@ inline void wstyle::FileDialog::Clone(const FileDialog& fd) {
 	of.lpstrFile = buff;
 }
 
-inline wstyle::FileDialog::FileDialog() {
+ wstyle::FileDialog::FileDialog() {
 	ZeroMemory(&of, sizeof(OPENFILENAME));
 	buff = new TCHAR[MAX_PATH];
 	buff[0] = '\0';
@@ -36,17 +36,17 @@ inline wstyle::FileDialog::FileDialog() {
 	of.Flags = OFN_PATHMUSTEXIST | OFN_FILEMUSTEXIST | OFN_HIDEREADONLY;
 }
 
-inline wstyle::FileDialog::FileDialog(HWND hWnd, HINSTANCE hInstance) :FileDialog() {
+ wstyle::FileDialog::FileDialog(HWND hWnd, HINSTANCE hInstance) :FileDialog() {
 	of.hwndOwner = hWnd;
 	of.hInstance = hInstance;
 }
 
-inline void wstyle::FileDialog::Erase() {
+ void wstyle::FileDialog::Erase() {
 	delete[] buff;
 	buff = nullptr;
 }
 
-inline wstyle::FileDialog& wstyle::FileDialog::operator=(const FileDialog& fd) {
+ wstyle::FileDialog& wstyle::FileDialog::operator=(const FileDialog& fd) {
 	if (this == &fd)
 		return *this;
 	Erase();

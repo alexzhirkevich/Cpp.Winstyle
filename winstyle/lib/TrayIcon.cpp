@@ -1,12 +1,14 @@
 #include "../include/TrayIcon.h"
 
-inline void wstyle::TrayIcon::Load(HICON icon, int CallBackMessage, PCTCH tip) {
+UINT wstyle::TrayIcon::uID = 20001;
+
+ void wstyle::TrayIcon::Load(HICON icon, int CallBackMessage, PCTCH tip) {
 	pnid.hIcon = icon;
 	pnid.uCallbackMessage = CallBackMessage;
 	_tcscpy_s(pnid.szTip, sizeof(pnid.szTip), tip);
 }
 
-inline wstyle::TrayIcon::TrayIcon() {
+ wstyle::TrayIcon::TrayIcon() {
 	pnid.cbSize = sizeof(NOTIFYICONDATA);
 	pnid.hWnd = NULL;
 	pnid.hIcon = (HICON)LoadIcon(0, IDI_APPLICATION);
@@ -16,19 +18,19 @@ inline wstyle::TrayIcon::TrayIcon() {
 	_tcscpy_s(pnid.szTip, sizeof(pnid.szTip), TEXT(""));
 }
 
-inline wstyle::TrayIcon& wstyle::TrayIcon::operator = (const TrayIcon& trIcon) {
+ wstyle::TrayIcon& wstyle::TrayIcon::operator = (const TrayIcon& trIcon) {
 	if (this == &trIcon)
 		return *this;
 	Clone(trIcon);
 };
 
-inline void wstyle::TrayIcon::Clone(const TrayIcon& ti) {
+ void wstyle::TrayIcon::Clone(const TrayIcon& ti) {
 	pnid.hWnd = ti.pnid.hWnd;
 	pnid.hIcon = ti.pnid.hIcon;
 	pnid.uFlags = ti.pnid.uFlags;
 	_tcscpy_s(pnid.szTip, sizeof(pnid.szTip), ti.pnid.szTip);
 }
 
-inline bool wstyle::TrayIcon::Set(HWND hwnd) { pnid.hWnd = hwnd; return Shell_NotifyIcon(NIM_ADD, &pnid); }
+ bool wstyle::TrayIcon::Set(HWND hwnd) { pnid.hWnd = hwnd; return Shell_NotifyIcon(NIM_ADD, &pnid); }
 
-inline bool wstyle::TrayIcon::Remove() { return Shell_NotifyIcon(NIM_DELETE, &pnid); }
+ bool wstyle::TrayIcon::Remove() { return Shell_NotifyIcon(NIM_DELETE, &pnid); }

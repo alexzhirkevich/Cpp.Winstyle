@@ -37,8 +37,8 @@ namespace wstyle {
 		bool SetStepsCount(size_t nSteps);
 		bool SetStep(UINT step);
 		bool AddStep(UINT nSteps = 1);
-		size_t GetStepsCount() { return stepsCount; }
-		~ProgressBar() { Delete(); }
+		size_t GetStepsCount();
+		~ProgressBar();
 	};
 
 }

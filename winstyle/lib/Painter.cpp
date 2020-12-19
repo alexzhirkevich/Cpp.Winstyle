@@ -1,12 +1,21 @@
 #include "../include/Painter.h"
 
-inline HDC wstyle::Painter::GetDC() const {
+ HDC wstyle::Painter::GetDC() const {
 	if (_hBitmap)
 		return _hMemDC;
 	return paintstruct.hdc;
 }
 
-inline HDC wstyle::Painter::Open(HWND hwnd, HBRUSH BgrBrush, bool isBuffered, int BkMode)
+wstyle::Painter::Painter() : iWindowHeight(0), iWindowWidth(0), _iOldBkMode(0), _BkMode(TRANSPARENT),
+_hMemDC(nullptr), _hBitmap(nullptr), _hOldBitmap(nullptr), _hWnd(nullptr) {
+	ZeroMemory(&paintstruct, sizeof(PAINTSTRUCT));
+};
+
+wstyle::Painter::Painter(HWND hWnd, HBRUSH BgrBrush, bool isBuffered, int BkMode) : Painter() {
+	Open(hWnd, BgrBrush, isBuffered, BkMode); 
+};
+
+ HDC wstyle::Painter::Open(HWND hwnd, HBRUSH BgrBrush, bool isBuffered, int BkMode)
 {
 	BeginPaint(hwnd, &paintstruct);
 	if (isBuffered) {
@@ -27,7 +36,7 @@ inline HDC wstyle::Painter::Open(HWND hwnd, HBRUSH BgrBrush, bool isBuffered, in
 		return paintstruct.hdc;
 }
 
-inline bool wstyle::Painter::Close()
+ bool wstyle::Painter::Close()
 {
 	if (!_hBitmap)
 		return EndPaint(_hWnd, &paintstruct);
@@ -43,6 +52,6 @@ inline bool wstyle::Painter::Close()
 	return EndPaint(_hWnd, &paintstruct);
 }
 
-inline wstyle::Painter::~Painter() {
+ wstyle::Painter::~Painter() {
 	Close();
 }

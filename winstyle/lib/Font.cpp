@@ -33,7 +33,7 @@ BYTE wstyle::Font::Get::ClipPrecision() const { return owner->lfont.lfClipPrecis
 BYTE wstyle::Font::Get::Quality() const { return owner->lfont.lfQuality; }
 BYTE wstyle::Font::Get::PitchAndFamily() const { return owner->lfont.lfPitchAndFamily; }
 
-inline wstyle::Font& wstyle::Font::operator=(const Font& f) {
+ wstyle::Font& wstyle::Font::operator=(const Font& f) {
 	if (this == &f)
 		return *this;
 	Erase();
@@ -41,7 +41,7 @@ inline wstyle::Font& wstyle::Font::operator=(const Font& f) {
 	return *this;
 }
 
-inline void wstyle::Font::Default() {
+ void wstyle::Font::Default() {
 	lfont.lfHeight = 0;
 	lfont.lfWidth = 0;
 	lfont.lfEscapement = 0;
@@ -55,18 +55,18 @@ inline void wstyle::Font::Default() {
 	lfont.lfClipPrecision = 0;
 	lfont.lfQuality = 0;
 	lfont.lfPitchAndFamily = 0;
-	_tcscpy_s(lfont.lfFaceName, _tcslen(TEXT("")) * sizeof(TCHAR), TEXT(""));
+	_tcscpy_s(lfont.lfFaceName, sizeof(TCHAR), TEXT(""));
 	color = RGB(0, 0, 0);
 }
 
-inline wstyle::Font::Font(LONG Height, LONG Width, PCTCH FaceName, COLORREF Color, LONG Weight, bool Italic,
+ wstyle::Font::Font(LONG Height, LONG Width, PCTCH FaceName, COLORREF Color, LONG Weight, bool Italic,
 	bool UnderLine, bool StrikeOut, LONG Escapement, LONG Orientation, BYTE CharSet,
 	BYTE OutPrecision, BYTE ClipPrecision, BYTE Quality, BYTE PitchAndFamily) :Font() {
 	Create(Height, Width, FaceName, color, Weight, Italic, UnderLine, StrikeOut, Escapement,
 		Orientation, CharSet, OutPrecision, ClipPrecision, Quality, PitchAndFamily);
 }
 
-inline void wstyle::Font::Get::LogFont(LPLOGFONT logfont) const {
+ void wstyle::Font::Get::LogFont(LPLOGFONT logfont) const {
 	logfont->lfHeight = owner->lfont.lfHeight;
 	logfont->lfWidth = owner->lfont.lfWidth;
 	logfont->lfEscapement = owner->lfont.lfEscapement;
@@ -80,10 +80,10 @@ inline void wstyle::Font::Get::LogFont(LPLOGFONT logfont) const {
 	logfont->lfClipPrecision = owner->lfont.lfClipPrecision;
 	logfont->lfQuality = owner->lfont.lfQuality;
 	logfont->lfPitchAndFamily = owner->lfont.lfPitchAndFamily;
-	_tcscpy_s(logfont->lfFaceName,_tcslen(logfont->lfFaceName) * sizeof(TCHAR), owner->lfont.lfFaceName);
+	_tcscpy_s(logfont->lfFaceName,(_tcslen(logfont->lfFaceName)+1) * sizeof(TCHAR), owner->lfont.lfFaceName);
 }
 
-inline void wstyle::Font::Create(LONG Height, LONG Width, PCTCH FaceName, COLORREF Color, LONG Weight, bool Italic,
+ void wstyle::Font::Create(LONG Height, LONG Width, PCTCH FaceName, COLORREF Color, LONG Weight, bool Italic,
 	bool UnderLine, bool StrikeOut, LONG Escapement, LONG Orientation, BYTE CharSet,
 	BYTE OutPrecision, BYTE ClipPrecision, BYTE Quality, BYTE PitchAndFamily) {
 	Default();
@@ -100,11 +100,11 @@ inline void wstyle::Font::Create(LONG Height, LONG Width, PCTCH FaceName, COLORR
 	lfont.lfClipPrecision = ClipPrecision;
 	lfont.lfQuality = Quality;
 	lfont.lfPitchAndFamily = PitchAndFamily;
-	_tcscpy_s(lfont.lfFaceName,_tcslen(FaceName) * sizeof(TCHAR), FaceName);
+	_tcscpy_s(lfont.lfFaceName, (_tcslen(FaceName)+1) * sizeof(TCHAR), FaceName);
 	Restore();
 }
 
-inline void wstyle::Font::Create(LOGFONT lf) {
+ void wstyle::Font::Create(LOGFONT lf) {
 	Default();
 	lfont.lfHeight = lf.lfHeight;
 	lfont.lfWeight = lf.lfWidth;
@@ -119,11 +119,11 @@ inline void wstyle::Font::Create(LOGFONT lf) {
 	lfont.lfClipPrecision = lf.lfClipPrecision;
 	lfont.lfQuality = lf.lfQuality;
 	lfont.lfPitchAndFamily = lf.lfPitchAndFamily;
-	_tcscpy_s(lfont.lfFaceName,_tcslen(lf.lfFaceName), lf.lfFaceName);
+	_tcscpy_s(lfont.lfFaceName,(_tcslen(lf.lfFaceName)+1) * sizeof(TCHAR), lf.lfFaceName);
 	Restore();
 }
 
-inline void wstyle::Font::Erase() {
+ void wstyle::Font::Erase() {
 	DeleteFont(hfont);
 	hfont = nullptr;
 }

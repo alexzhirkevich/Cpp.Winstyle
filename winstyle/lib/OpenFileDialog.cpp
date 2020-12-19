@@ -1,12 +1,12 @@
 #include "../include/OpenFileDialog.h"
 
-inline  bool wstyle::OpenFileDialog::ShowDialog() {
+  bool wstyle::OpenFileDialog::ShowDialog() {
 	if (GetOpenFileName(&of))
 		return true;
 	return false;
 }
 
-inline bool wstyle::OpenFileDialog::ShowDialog(HWND hWnd) {
+ bool wstyle::OpenFileDialog::ShowDialog(HWND hWnd) {
 	HWND hPrevOwner = of.hwndOwner;
 	of.hwndOwner = hWnd;
 	if (GetOpenFileName(&of))

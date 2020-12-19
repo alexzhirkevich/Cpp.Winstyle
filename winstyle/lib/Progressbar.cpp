@@ -17,11 +17,11 @@ bool wstyle::ProgressBar::SetStepsCount(size_t nSteps)
 	return true;
 }
 
-inline wstyle::ProgressBar::ProgressBar(const ProgressBar& pb): Control(pb.owner,ControlType::ProgressBar) {
+ wstyle::ProgressBar::ProgressBar(const ProgressBar& pb): Control(pb.owner,ControlType::ProgressBar) {
 	Clone(pb);
 }
 
-inline bool wstyle::ProgressBar::AddStep(UINT nSteps) {
+ bool wstyle::ProgressBar::AddStep(UINT nSteps) {
 	
 	if (!hWnd)
 		return false;
@@ -33,6 +33,10 @@ inline bool wstyle::ProgressBar::AddStep(UINT nSteps) {
 	return true;
 }
 
+size_t wstyle::ProgressBar::GetStepsCount() { return stepsCount; }
+
+wstyle::ProgressBar::~ProgressBar() { Delete(); }
+
 bool wstyle::ProgressBar::SetStep(UINT step)
 {
 	if (!hWnd || step > stepsCount)
@@ -43,14 +47,14 @@ bool wstyle::ProgressBar::SetStep(UINT step)
 	return true;
 }
 
-inline void wstyle::ProgressBar::Clone(const ProgressBar& pb) {
+ void wstyle::ProgressBar::Clone(const ProgressBar& pb) {
 	__super::Clone(pb);
 	RECT r = pb.GetRectangle();
 	Create(r.left, r.top, r.right - r.left, r.bottom - r.top, style);
 	SetStepsCount(pb.stepsCount);
 }
 
-inline wstyle::ProgressBar& wstyle::ProgressBar::operator=(const ProgressBar& pb) {
+ wstyle::ProgressBar& wstyle::ProgressBar::operator=(const ProgressBar& pb) {
 	if (this == &pb)
 		return *this;
 	Delete();

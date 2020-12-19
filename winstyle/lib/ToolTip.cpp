@@ -1,6 +1,6 @@
 #include "../include/ToolTip.h"
 
-inline wstyle::ToolTip::ToolTip() : hWndToolTip(nullptr), title(nullptr), isOn(false) {
+ wstyle::ToolTip::ToolTip() : hWndToolTip(nullptr), title(nullptr), isOn(false) {
 	toolInfo = { 0 };
 	toolInfo.cbSize = sizeof(toolInfo);
 	toolInfo.uFlags = TTF_SUBCLASS;
@@ -8,7 +8,7 @@ inline wstyle::ToolTip::ToolTip() : hWndToolTip(nullptr), title(nullptr), isOn(f
 	title = TEXT("Tip");
 };
 
-inline wstyle::ToolTip::ToolTip(const ToolTip& tTip) : ToolTip() {
+ wstyle::ToolTip::ToolTip(const ToolTip& tTip) : ToolTip() {
 
 	toolInfo.hwnd = tTip.toolInfo.hwnd;
 	toolInfo.lpszText = new TCHAR[_tcslen(tTip.toolInfo.lpszText) + 1];
@@ -19,7 +19,7 @@ inline wstyle::ToolTip::ToolTip(const ToolTip& tTip) : ToolTip() {
 	Create(toolInfo.hwnd, title.c_str());
 }
 
-inline wstyle::ToolTip& wstyle::ToolTip::operator=(const ToolTip& tTip) {
+ wstyle::ToolTip& wstyle::ToolTip::operator=(const ToolTip& tTip) {
 	if (this == &tTip)
 		return *this;
 	Erase();
@@ -27,7 +27,7 @@ inline wstyle::ToolTip& wstyle::ToolTip::operator=(const ToolTip& tTip) {
 	return *this;
 }
 
-inline bool wstyle::ToolTip::Create(HWND owner, PCTCH pszText) {
+ bool wstyle::ToolTip::Create(HWND owner, PCTCH pszText) {
 	if (!owner || !pszText)
 		return false;
 
@@ -52,7 +52,7 @@ inline bool wstyle::ToolTip::Create(HWND owner, PCTCH pszText) {
 	return true;
 }
 
-inline bool wstyle::ToolTip::SetTip(PCTCH pszText) {
+ bool wstyle::ToolTip::SetTip(PCTCH pszText) {
 	if (!pszText)
 		return false;
 	title = pszText;
@@ -61,13 +61,13 @@ inline bool wstyle::ToolTip::SetTip(PCTCH pszText) {
 	return true;
 }
 
-inline bool wstyle::ToolTip::SetParent(HWND owner) {
+ bool wstyle::ToolTip::SetParent(HWND owner) {
 	if (!Erase())
 		return false;
 	return Create(owner, title.c_str());
 }
 
-inline bool wstyle::ToolTip::Disable() {
+ bool wstyle::ToolTip::Disable() {
 	if (!isOn)
 		return false;
 	SendMessage(hWndToolTip, TTM_DELTOOL, 0, (LPARAM)&toolInfo);
@@ -75,7 +75,7 @@ inline bool wstyle::ToolTip::Disable() {
 	return true;
 }
 
-inline bool wstyle::ToolTip::Enable() {
+ bool wstyle::ToolTip::Enable() {
 	if (isOn || !hWndToolTip)
 		return false;
 	SendMessage(hWndToolTip, TTM_ADDTOOL, 0, (LPARAM)&toolInfo);
@@ -83,7 +83,7 @@ inline bool wstyle::ToolTip::Enable() {
 	return true;
 }
 
-inline bool wstyle::ToolTip::Erase() {
+ bool wstyle::ToolTip::Erase() {
 	if (!DestroyWindow(hWndToolTip))
 		return false;
 	hWndToolTip = nullptr;

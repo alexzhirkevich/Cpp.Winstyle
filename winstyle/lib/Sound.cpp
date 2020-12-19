@@ -10,14 +10,14 @@ void wstyle::ToggleSounds() {
 
 bool wstyle::Sound::IsOn = true;
 
-inline void wstyle::Sound::Clone(const Sound& s) {
+ void wstyle::Sound::Clone(const Sound& s) {
 	if (!path.empty())
 		SetPath(s.path.c_str());
 	else
 		Load(s.id);
 }
 
-inline wstyle::Sound& wstyle::Sound::operator=(const Sound& s) {
+ wstyle::Sound& wstyle::Sound::operator=(const Sound& s) {
 	if (this == &s)
 		return *this;
 	Erase();
@@ -25,7 +25,7 @@ inline wstyle::Sound& wstyle::Sound::operator=(const Sound& s) {
 	return *this;
 }
 
-inline bool wstyle::Sound::Load(int RES_ID)
+ bool wstyle::Sound::Load(int RES_ID)
 {
 	hMod = GetModuleHandle(nullptr); if (!hMod) return false;
 	HRSRC hRes = FindResource(hMod, (PCTCH)RES_ID, RT_RCDATA); if (!hRes) return false;
@@ -34,11 +34,11 @@ inline bool wstyle::Sound::Load(int RES_ID)
 	return true;
 }
 
-inline void wstyle::Sound::SetPath(PCTCH _path) {
+ void wstyle::Sound::SetPath(PCTCH _path) {
 	path = _path;
 }
 
-inline bool wstyle::Sound::Play(DWORD fdwSound) const {
+ bool wstyle::Sound::Play(DWORD fdwSound) const {
 	if ((path.empty() && !lpbArray) || (!IsOn))
 		return false;
 	if (!path.empty())
@@ -48,7 +48,7 @@ inline bool wstyle::Sound::Play(DWORD fdwSound) const {
 	return false;
 }
 
-inline void wstyle::Sound::Erase() {
+ void wstyle::Sound::Erase() {
 	PlaySound(nullptr, nullptr, NULL);
 	UnlockResource(hGlob);
 	FreeResource(hGlob);

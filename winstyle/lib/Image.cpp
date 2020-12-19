@@ -1,20 +1,20 @@
 #include "../include/Image.h"
 
-inline wstyle::Image::Image() :img(nullptr), buf(nullptr), path(nullptr) {
+ wstyle::Image::Image() :img(nullptr), buf(nullptr), path(nullptr) {
 	GdiplusStartup(&gdiplusToken, &gdiplusStartupInput, NULL);
 }
 
-inline void wstyle::Image::Clone(const Image& img) {
+ void wstyle::Image::Clone(const Image& img) {
 	if (img.buf) {
 		delete[] buf;
 		buf = new WCHAR[wcslen(img.buf) + 1];
-		_tcscpy_s(buf, _tcslen(img.buf) * sizeof(WCHAR), img.buf);
+		wcscpy_s(buf, wcslen(img.buf) * sizeof(WCHAR), img.buf);
 	}
 	if (img.path)
 		Load(img.path);
 }
 
-inline bool wstyle::Image::Erase() {
+ bool wstyle::Image::Erase() {
 	if (!img) {
 		delete[] buf;
 		return false;
@@ -29,7 +29,7 @@ inline bool wstyle::Image::Erase() {
 	Gdiplus::GdiplusShutdown(gdiplusToken);
 }
 
-inline wstyle::Image& wstyle::Image::operator=(const Image& img) {
+ wstyle::Image& wstyle::Image::operator=(const Image& img) {
 	if (this == &img)
 		return *this;
 	Erase();
@@ -37,7 +37,7 @@ inline wstyle::Image& wstyle::Image::operator=(const Image& img) {
 	return *this;
 }
 
-inline bool wstyle::Image::Load(PCTCH _path) {
+ bool wstyle::Image::Load(PCTCH _path) {
 	if (img)
 		delete img;
 
@@ -60,7 +60,7 @@ inline bool wstyle::Image::Load(PCTCH _path) {
 	return false;
 }
 
-inline bool wstyle::Image::Paint(HDC hDC, HWND hWnd, int x, int y, int width, int height) {
+ bool wstyle::Image::Paint(HDC hDC, HWND hWnd, int x, int y, int width, int height) {
 	if (!img)
 		return false;
 	Gdiplus::Graphics graph(hDC);

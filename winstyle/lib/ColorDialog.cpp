@@ -5,14 +5,14 @@ COLORREF wstyle::ColorDialog::dColors[16] = { RGB(255, 0, 0),RGB(255, 140, 0),RG
 	RGB(255, 255, 255),RGB(128, 128, 128),RGB(0, 255, 255),RGB(0, 100, 0),
 	RGB(128, 128, 0),RGB(139, 69, 19),RGB(210, 180, 140), RGB(199, 21, 133) };
 
-inline void wstyle::ColorDialog::Clone(const ColorDialog& cd) {
+ void wstyle::ColorDialog::Clone(const ColorDialog& cd) {
 	cc = cd.cc;
 	for (int i = 0; i < 16; i++)
 		dColors[i] = cd.dColors[i];
 	cc.lpCustColors = dColors;
 }
 
-inline wstyle::ColorDialog::ColorDialog() {
+ wstyle::ColorDialog::ColorDialog() {
 	ZeroMemory(&cc, sizeof(CHOOSECOLOR));
 	cc.lStructSize = sizeof(CHOOSECOLOR);
 	cc.hwndOwner = nullptr;
@@ -25,18 +25,18 @@ inline wstyle::ColorDialog::ColorDialog() {
 	cc.lpCustColors = dColors;
 }
 
-inline wstyle::ColorDialog::ColorDialog(HWND hWnd, HINSTANCE hInstance) : ColorDialog() {
+ wstyle::ColorDialog::ColorDialog(HWND hWnd, HINSTANCE hInstance) : ColorDialog() {
 	cc.hwndOwner = hWnd;
 	cc.hInstance = (HWND)hInstance;
 }
 
-inline bool wstyle::ColorDialog::ShowDialog() {
+ bool wstyle::ColorDialog::ShowDialog() {
 	if (ChooseColor(&cc))
 		return true;
 	return false;
 }
 
-inline bool wstyle::ColorDialog::ShowDialog(HWND hWnd) {
+ bool wstyle::ColorDialog::ShowDialog(HWND hWnd) {
 	HWND hPrevOwner = cc.hwndOwner;
 	cc.hwndOwner = hWnd;
 	if (ChooseColor(&cc))
@@ -48,7 +48,7 @@ inline bool wstyle::ColorDialog::ShowDialog(HWND hWnd) {
 	return false;
 }
 
-inline wstyle::ColorDialog& wstyle::ColorDialog::operator=(const ColorDialog& cd) {
+ wstyle::ColorDialog& wstyle::ColorDialog::operator=(const ColorDialog& cd) {
 	if (this == &cd)
 		return *this;
 	Clone(cd);

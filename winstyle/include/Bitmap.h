@@ -35,18 +35,18 @@ namespace wstyle {
 		void Clone(const Bitmap& bmp);
 	public:
 		Bitmap();
-		Bitmap(HWND hwnd, PCTCH path) :Bitmap() { Load(hwnd, path); }
-		Bitmap(HINSTANCE hInst, HWND hwnd, int IDB_BITMAP) :Bitmap() { Load(hwnd, hInst, IDB_BITMAP); }
-		Bitmap(const Bitmap& p) :Bitmap() { Clone(p); }
+		Bitmap(HWND hwnd, PCTCH path);
+		Bitmap(HINSTANCE hInst, HWND hwnd, int IDB_BITMAP);
+		Bitmap(const Bitmap& p);
 		Bitmap& operator =(const Bitmap& p);
-		int Width() const { return bitmap.bmWidth; }
-		int Height() const { return bitmap.bmHeight; }
-		_tstring Path() const { return this->path; }
+		int Width() const;
+		int Height() const;
+		_tstring Path() const;
 		bool Paint(HDC hDC, int x, int y) const;
 		bool Load(HWND hwnd, PCTCH path);
 		bool Load(HWND hwnd, HINSTANCE hInst, int IDB_BITMAP);
 		bool Erase();
-		virtual ~Bitmap() { Erase(); };
+		virtual ~Bitmap();
 	};
 
 }

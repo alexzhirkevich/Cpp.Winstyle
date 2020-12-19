@@ -1,13 +1,13 @@
 #include "../include/FontDialog.h"
 
-inline void wstyle::FontDialog::Clone(const FontDialog fd) {
+ void wstyle::FontDialog::Clone(const FontDialog fd) {
 	cf = fd.cf;
 	lf = fd.lf;
 	_tcscpy_s(lf.lfFaceName, _tcslen(fd.lf.lfFaceName)*sizeof(TCHAR), fd.lf.lfFaceName);
 	cf.lpLogFont = &lf;
 }
 
-inline wstyle::FontDialog::FontDialog() {
+ wstyle::FontDialog::FontDialog() {
 	ZeroMemory(&cf, sizeof(CHOOSEFONT));
 	lf.lfHeight = 20;
 	lf.lfUnderline = false;
@@ -19,18 +19,18 @@ inline wstyle::FontDialog::FontDialog() {
 	cf.rgbColors = RGB(0, 0, 0);
 }
 
-inline wstyle::FontDialog::FontDialog(HWND hWnd, HINSTANCE hInstance) : FontDialog() {
+ wstyle::FontDialog::FontDialog(HWND hWnd, HINSTANCE hInstance) : FontDialog() {
 	cf.hwndOwner = hWnd;
 	cf.hInstance = hInstance;
 }
 
-inline bool wstyle::FontDialog::ShowDialog() {
+ bool wstyle::FontDialog::ShowDialog() {
 	if (ChooseFont(&cf))
 		return true;
 	return false;
 }
 
-inline bool wstyle::FontDialog::ShowDialog(HWND hWnd) {
+ bool wstyle::FontDialog::ShowDialog(HWND hWnd) {
 	HWND hPrevOwner = cf.hwndOwner;
 	cf.hwndOwner = hWnd;
 	if (ChooseFont(&cf))
@@ -42,7 +42,7 @@ inline bool wstyle::FontDialog::ShowDialog(HWND hWnd) {
 	return false;
 }
 
-inline wstyle::FontDialog& wstyle::FontDialog::operator=(const FontDialog& fd) {
+ wstyle::FontDialog& wstyle::FontDialog::operator=(const FontDialog& fd) {
 	if (this == &fd)
 		return *this;
 	Clone(fd);

@@ -10,7 +10,7 @@ bool wstyle::Webcam::Dialog::VideoSource() {
 	return false;
 }
 
-inline bool wstyle::Webcam::Dialog::VideoFormat() {
+ bool wstyle::Webcam::Dialog::VideoFormat() {
 	if (!owner)
 		return false;
 	if (owner->CapDrvCaps.fHasDlgVideoFormat) {
@@ -20,7 +20,7 @@ inline bool wstyle::Webcam::Dialog::VideoFormat() {
 	return false;
 }
 
-inline bool wstyle::Webcam::Dialog::VideoDisplay() {
+ bool wstyle::Webcam::Dialog::VideoDisplay() {
 	if (!owner)
 		return false;
 	if (owner->CapDrvCaps.fHasDlgVideoDisplay) {
@@ -30,14 +30,14 @@ inline bool wstyle::Webcam::Dialog::VideoDisplay() {
 	return false;
 }
 
-inline wstyle::Webcam::Webcam() : wndWidth(640), wndHeight(480),
+ wstyle::Webcam::Webcam() : wndWidth(640), wndHeight(480),
 hWnd(nullptr), Dialog(this), Overlay(this), Settings(this), State(this){
 	wndName = new TCHAR[_tcslen(TEXT("Cam")) + 1];
 	
 	_tcscpy_s(wndName,_tcslen(TEXT("Cam"))*sizeof(TCHAR), TEXT("Cam"));
 }
 
-inline void wstyle::Webcam::Create(HWND hWndOwner, int x, int y, int Width, int Height,
+ void wstyle::Webcam::Create(HWND hWndOwner, int x, int y, int Width, int Height,
 	int camResolutionWidth, int camResolutionHeight, int camWindowStyle) {
 	if (!hWndOwner)
 		return;
@@ -85,12 +85,12 @@ inline void wstyle::Webcam::Create(HWND hWndOwner, int x, int y, int Width, int 
 	Settings.SetResolution(camResolutionWidth, camResolutionHeight);
 }
 
-inline void wstyle::Webcam::Settings::SetRefreshRate(UINT upd) {
+ void wstyle::Webcam::Settings::SetRefreshRate(UINT upd) {
 	if (upd > 0)
 		capPreviewRate(owner->hWnd, 1000 / upd);
 }
 
-inline bool wstyle::Webcam::Settings::SetResolution(int camResolutionWidth, int camResolutionHeight) {
+ bool wstyle::Webcam::Settings::SetResolution(int camResolutionWidth, int camResolutionHeight) {
 	if (!(camResolutionHeight > 0 && camResolutionWidth > 0))
 		return false;
 	capGetVideoFormat(owner->hWnd, &owner->s, sizeof(owner->s));
@@ -110,11 +110,11 @@ inline bool wstyle::Webcam::Settings::SetResolution(int camResolutionWidth, int 
 	return true;
 }
 
-inline void wstyle::Webcam::Settings::SetBounds(int x, int y, int width, int height) {
+ void wstyle::Webcam::Settings::SetBounds(int x, int y, int width, int height) {
 	SetWindowPos(owner->hWnd, 0, x, y, width, height, 0);
 }
 
-inline bool wstyle::Webcam::Settings::SetWindowName(PCTCH title) {
+ bool wstyle::Webcam::Settings::SetWindowName(PCTCH title) {
 	if (!title)
 		return false;
 	delete[] owner->wndName;
@@ -133,19 +133,19 @@ void wstyle::Webcam::Overlay::Disable() {
 		capOverlay(owner->hWnd, FALSE);
 }
 
-inline void wstyle::Webcam::State::Show() {
+ void wstyle::Webcam::State::Show() {
 	if (!owner->hWnd)
 		return;
 	capPreview(owner->hWnd, TRUE);
 	ShowWindow(owner->hWnd, SW_SHOW);
 }
 
-inline void wstyle::Webcam::State::Hide() {
+ void wstyle::Webcam::State::Hide() {
 	capPreview(owner->hWnd, FALSE);
 	ShowWindow(owner->hWnd, SW_HIDE);
 }
 
-inline bool wstyle::Webcam::MakePhoto(PCTCH fileName) {
+ bool wstyle::Webcam::MakePhoto(PCTCH fileName) {
 	capCaptureSequence(hWnd);
 	capGrabFrame(hWnd);
 	//PAVIFILE pf;
@@ -154,7 +154,7 @@ inline bool wstyle::Webcam::MakePhoto(PCTCH fileName) {
 	return capFileSaveDIB(hWnd, fileName);
 }
 
-inline void wstyle::Webcam::Delete() {
+ void wstyle::Webcam::Delete() {
 	capDriverDisconnect(hWnd);
 	DestroyWindow(hWnd);
 	delete[] wndName;
