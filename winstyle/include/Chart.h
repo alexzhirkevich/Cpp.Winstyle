@@ -26,6 +26,8 @@
 
 namespace wstyle {
 
+	class Window;
+
 	class Chart
 	{
 	public:
@@ -98,7 +100,7 @@ namespace wstyle {
 		void AddValue(PCTCH title, double value);
 		void AddValue(PCTCH title, double value, const Color& clr);
 		bool DeleteValue(PCTCH title);
-		bool Paint(HDC hdc);
+		bool Paint(Window* window);
 		ChartItem& operator [](int index);
 		void Erase();
 		void Sort(bool (*Pred)(ChartItem first, ChartItem second));

@@ -1,4 +1,5 @@
 #include "../include/Chart.h"
+#include "../include/Window.h"
 
 #if defined _MSC_VER && _MSC_VER >=1200
 #pragma warning(push)
@@ -137,12 +138,13 @@ bool wstyle::Chart::DeleteValue(PCTCH _title) {
 	return false;
 }
 
-bool wstyle::Chart::Paint(HDC hdc) {
+bool wstyle::Chart::Paint(Window* window) {
 	if (!Visible)
 		return true;
-	if (!hdc || (DrawRect.top == 0 && DrawRect.left == 0 && DrawRect.right == 0 && DrawRect.bottom == 0))
-		return false;
+	if (!window->GetPaintDC())
+		throw WstyleException("Chart::Paint : Paint functions can be called only from Window::OnPaint. Override this func in your class");
 
+	HDC hdc = window ->GetPaintDC();
 
 	HFONT hPrevFont = Text.Title.Font.SetOnDC(hdc);
 	std::pair<HBRUSH, HPEN> obj = Background.Color.SetOnDC(hdc);

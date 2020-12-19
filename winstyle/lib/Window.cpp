@@ -5,6 +5,7 @@
 #include "../include/MenuBar.h"
 #include "../include/Menu.h"
 #include "../include/MenuItem.h"
+#include "../include/WinstyleException.h"
 
 UINT wstyle::Window::number = 0;
 
@@ -250,12 +251,9 @@ LRESULT __stdcall wstyle::Window::static_WndProc(HWND hWnd, UINT uMsg, WPARAM wP
 {
 	Window* w = (Window*)GetWindowLongPtr(hWnd, GWLP_USERDATA);
 
-	__try {
+	if (w)
 		return w->WindowProc(hWnd, uMsg, wParam, lParam);
-	}
-	__except (EXCEPTION_EXECUTE_HANDLER) {
-		return DefWindowProc(hWnd, uMsg, wParam, lParam);
-	}
+	return DefWindowProc(hWnd, uMsg, wParam, lParam);
 }
 
 LRESULT wstyle::Window::OnCreate(WPARAM wParam, LPARAM lParam)
